@@ -1,37 +1,37 @@
 package lexer
 
 import (
-	"monkey/token"
 	"testing"
+
+	"monkey/token"
 )
 
 func TestNextToken(t *testing.T) {
-	input := `
-		let five = 5;
-		let ten = 10;
+	input := `let five = 5;
+let ten = 10;
 
-		let add = fn(x, y) {
-		x + y;
-		};
+let add = fn(x, y) {
+  x + y;
+};
 
-		let result = add(five, ten);
-		!-/*5;
-		5 < 10 > 5;
+let result = add(five, ten);
+!-/*5;
+5 < 10 > 5;
 
-		if (5 < 10) {
-			return true;
-		} else {
-			return false;
-		}
+if (5 < 10) {
+	return true;
+} else {
+	return false;
+}
 
-		10 == 10;
-		10 != 9;
-		"foobar"
-		"foo bar"
-		[1, 2];
-		{"foo": "bar"}
-		macro(x, y) { x + y; };
-	`
+10 == 10;
+10 != 9;
+"foobar"
+"foo bar"
+[1, 2];
+{"foo": "bar"}
+`
+
 	tests := []struct {
 		expectedType    token.TokenType
 		expectedLiteral string
@@ -106,7 +106,7 @@ func TestNextToken(t *testing.T) {
 		{token.INT, "10"},
 		{token.SEMICOLON, ";"},
 		{token.INT, "10"},
-		{token.NEQ, "!="},
+		{token.NOT_EQ, "!="},
 		{token.INT, "9"},
 		{token.SEMICOLON, ";"},
 		{token.STRING, "foobar"},
@@ -122,19 +122,6 @@ func TestNextToken(t *testing.T) {
 		{token.COLON, ":"},
 		{token.STRING, "bar"},
 		{token.RBRACE, "}"},
-		{token.MACRO, "macro"},
-		{token.LPAREN, "("},
-		{token.IDENT, "x"},
-		{token.COMMA, ","},
-		{token.IDENT, "y"},
-		{token.RPAREN, ")"},
-		{token.LBRACE, "{"},
-		{token.IDENT, "x"},
-		{token.PLUS, "+"},
-		{token.IDENT, "y"},
-		{token.SEMICOLON, ";"},
-		{token.RBRACE, "}"},
-		{token.SEMICOLON, ";"},
 		{token.EOF, ""},
 	}
 
@@ -144,10 +131,13 @@ func TestNextToken(t *testing.T) {
 		tok := l.NextToken()
 
 		if tok.Type != tt.expectedType {
-			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got %q", i, tt.expectedType, tok.Type)
+			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q",
+				i, tt.expectedType, tok.Type)
 		}
+
 		if tok.Literal != tt.expectedLiteral {
-			t.Fatalf("tests[%d] - literal wrong. expected=%q, got %q", i, tt.expectedLiteral, tok.Literal)
+			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q",
+				i, tt.expectedLiteral, tok.Literal)
 		}
 	}
 }
